@@ -27,21 +27,19 @@ CORS(app, resources={r'/*': {'origins': '*'}})
 @app.route('/post', methods=['POST'])
 def createPost():
   try:
-    return "Create Post"
-  except Exception as e:
-    return f"An Error Occured: {e}"
-
-@app.route('/post', methods=['GET'])
-def getPost():
-  try:
-    return "Get Post"
-  except Exception as e:
-    return f"An Error Occured: {e}"
-
-@app.route('/posts', methods=['GET'])
-def allPosts():
-  try:
-    return "All Posts"
+    post_ref.document().set(
+      {
+        "title": request.json['title'],
+        "content": request.json['content'],
+        "tags": request.json['tags'],
+        "userId": request.json['user']
+      }
+    )
+    return jsonify(
+      {
+        "success": True,
+      }
+    ), 200
   except Exception as e:
     return f"An Error Occured: {e}"
 
