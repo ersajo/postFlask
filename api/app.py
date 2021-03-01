@@ -2,6 +2,7 @@ import time
 import os
 import hashlib
 import jwt
+import datetime
 from firebase_admin import credentials, firestore, initialize_app
 from flask import Flask, request, jsonify
 from flask_cors import CORS
@@ -27,12 +28,14 @@ CORS(app, resources={r'/*': {'origins': '*'}})
 @app.route('/post', methods=['POST'])
 def createPost():
   try:
+    ts = datetime.datetime.now().timestamp()
     post_ref.document().set(
       {
         "title": request.json['title'],
         "content": request.json['content'],
         "tags": request.json['tags'],
-        "userId": request.json['user']
+        "userId": request.json['user'],
+        "created_at": ts
       }
     )
     return jsonify(
@@ -73,10 +76,12 @@ def signup():
       ), 200
     else:
       password = hashlib.sha256(request.json['password'].encode())
+      ts = datetime.datetime.now().timestamp()
       user_ref.document().set(
         {
           "email": request.json['email'],
-          "password": password.hexdigest()
+          "password": password.hexdigest(),
+          "created_at": ts
         }
       )
       return jsonify(
