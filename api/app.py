@@ -43,6 +43,14 @@ def createPost():
   except Exception as e:
     return f"An Error Occured: {e}"
 
+@app.route('/posts', methods=['GET'])
+def allPosts():
+  try:
+    docs = [doc.to_dict() for doc in post_ref.stream()]
+    return jsonify(docs), 200
+  except Exception as e:
+    return f"An Error Occured: {e}"
+
 @app.route('/user/<user>/post', methods=['GET'])
 def allUserPosts(user):
   try:

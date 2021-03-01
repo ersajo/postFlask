@@ -25,6 +25,7 @@ export const auth = {
 }
 
 export const post = {
+  allPosts: () => instance.get('/posts'),
   createPost: body => instance.post('/post', body),
   getPostsByUser: user => instance.get('/user/' + user + '/post')
 }
